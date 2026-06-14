@@ -16,8 +16,10 @@ interface TaskListProps {
   countText?: string
   onToggle?: (id: string | number) => void
   onDelete?: (id: string | number) => void
-  linkToTaskDetail?: boolean
-}
+  linkToTaskDetail?: boolean}
+
+
+
 
 const defaultTasks: Task[] = [
   {
@@ -40,24 +42,37 @@ const defaultTasks: Task[] = [
     description: 'Third hardcoded task',
     priority: 'Priority: Low',
     completed: false,
-  },
-]
+  },]
+
 
 export default function TaskList({
-  tasks,
+  tasks, 
+  onToggle,
 }: TaskListProps) {
   const list = tasks ?? defaultTasks
 
-  return (
-    <section id="task-list">
-      {list.map((task) => (
-        <TaskCard
-          key={task.id}
-          title={task.title}
-          description={task.description}
-          priority={task.priority}
-        />
-      ))}
-    </section>
-  )
-}
+  const completedCount = list.filter(
+    (task) => task.completed,
+  ).length
+
+  return(
+    <>
+      <div id="task-count">
+        {completedCount} of {list.length} completed
+      </div>
+
+      <section id="task-list">
+        {list.map((task) => (
+          <TaskCard
+            key={task.id}
+            taskId={task.id}
+            title={task.title}
+            description={task.description}
+            priority={task.priority}
+            completed={task.completed}
+            onToggle={onToggle}
+          />
+        ))}
+      </section>
+    </>
+  )};

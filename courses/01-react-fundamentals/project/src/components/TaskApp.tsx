@@ -20,7 +20,9 @@ export default function TaskApp({
   setTasks,
   showForm,
 }: TaskAppProps) {
-  const countText = `${tasks.length} Tasks`
+  const completedCount = tasks.filter(
+    (task) => task.completed,
+  ).length
 
   const handleAddTask = (task: Task) => {
     if (!setTasks) return
@@ -28,15 +30,35 @@ export default function TaskApp({
     setTasks((prev) => [...prev, task])
   }
 
+  const handleToggle = (id: string | number) => {
+    if (!setTasks) return
+
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === id
+          ? {
+              ...task,
+              completed: !task.completed,
+            }
+          : task,
+      ),
+    )
+  }
+
   return (
     <>
-      <div id="task-count">{countText}</div>
+      <div id="task-count">
+        {completedCount} of {tasks.length} completed
+      </div>
 
       {showForm && (
         <TaskForm onAddTask={handleAddTask} />
       )}
 
-      <TaskList tasks={tasks} />
+      <TaskList
+        tasks={tasks}
+        onToggle={handleToggle}
+      />
     </>
   )
 }
