@@ -1,3 +1,86 @@
-export default function FilterBar() {
-  return <div id="filter-bar" />
+
+type FilterType =
+  | 'all'
+  | 'active'
+  | 'completed'
+
+type SortType =
+  | 'recent'
+  | 'high-low'
+  | 'low-high'
+  | 'alphabetical'
+
+interface FilterBarProps {
+  filter: FilterType
+  onFilterChange: (
+    filter: FilterType
+  ) => void
+  sortOrder: SortType
+  onSortChange: (
+    sort: SortType
+  ) => void
+}
+
+export default function FilterBar({
+  filter,
+  onFilterChange,
+  sortOrder,
+  onSortChange,
+}: FilterBarProps) {
+  return (
+    <div id="filter-bar">
+      <button
+        data-active={filter === 'all'}
+        onClick={() =>
+          onFilterChange('all')
+        }
+      >
+        All
+      </button>
+
+      <button
+        data-active={filter === 'active'}
+        onClick={() =>
+          onFilterChange('active')
+        }
+      >
+        Active
+      </button>
+
+      <button
+        data-active={filter === 'completed'}
+        onClick={() =>
+          onFilterChange('completed')
+        }
+      >
+        Completed
+      </button>
+
+      <select
+        id="sort-order"
+        value={sortOrder}
+        onChange={(e) =>
+          onSortChange(
+            e.target.value as SortType
+          )
+        }
+      >
+        <option value="recent">
+          Recently Added
+        </option>
+
+        <option value="high-low">
+          Priority: High to Low
+        </option>
+
+        <option value="low-high">
+          Priority: Low to High
+        </option>
+
+        <option value="alphabetical">
+          Alphabetical
+        </option>
+      </select>
+    </div>
+  )
 }

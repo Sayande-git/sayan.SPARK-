@@ -1,3 +1,5 @@
+
+
 import TaskCard from './TaskCard'
 
 export interface Task {
@@ -6,59 +8,51 @@ export interface Task {
   description: string
   priority: string
   completed: boolean
-  category?: string
-  tags?: string[]
-  dueDate?: string | number
 }
 
 interface TaskListProps {
   tasks?: Task[]
   countText?: string
   onToggle?: (id: string | number) => void
-  onDelete?: (id: string | number) => void
-  linkToTaskDetail?: boolean}
+  onDelete?: (id: string | number) => void  }
 
 
-
-
-const defaultTasks: Task[] = [
+const HARDCODED_TASKS: Task[] = [
   {
     id: 1,
     title: 'Task One',
     description: 'First hardcoded task',
-    priority: 'Priority: High',
-    completed: false,
-  },
+
+    priority: 'High',
+    completed: false,}
+  ,
   {
     id: 2,
     title: 'Task Two',
     description: 'Second hardcoded task',
-    priority: 'Priority: Medium',
+    priority: 'Medium',
     completed: false,
   },
   {
     id: 3,
     title: 'Task Three',
     description: 'Third hardcoded task',
-    priority: 'Priority: Low',
-    completed: false,
-  },]
-
+    priority: 'Low',
+    completed: false,},
+]
 
 export default function TaskList({
-  tasks, 
+  tasks,
+  countText,
   onToggle,
+  onDelete,
 }: TaskListProps) {
-  const list = tasks ?? defaultTasks
+  const list = tasks ?? HARDCODED_TASKS
 
-  const completedCount = list.filter(
-    (task) => task.completed,
-  ).length
-
-  return(
+  return (
     <>
       <div id="task-count">
-        {completedCount} of {list.length} completed
+        {countText}
       </div>
 
       <section id="task-list">
@@ -70,9 +64,11 @@ export default function TaskList({
             description={task.description}
             priority={task.priority}
             completed={task.completed}
-            onToggle={onToggle}
+            onToggle={() => onToggle?.(task.id)}
+            onDelete={onDelete}
           />
         ))}
       </section>
     </>
-  )};
+  )
+}
