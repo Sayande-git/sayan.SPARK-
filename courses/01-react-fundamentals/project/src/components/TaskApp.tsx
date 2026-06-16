@@ -1,5 +1,7 @@
-
-import React, { useState } from 'react'
+import React, {
+  useEffect,
+  useState,
+} from 'react'
 import TaskForm from './TaskForm'
 import TaskList, { Task } from './TaskList'
 import FilterBar from './FilterBar'
@@ -24,7 +26,10 @@ interface TaskAppProps {
   showForm?: boolean
   countFormat?: string
 
-  onDelete?: (id: string | number) => void
+  onDelete?: (
+    id: string | number
+  ) => void
+
   showFilterBar?: boolean
   showStatsPanel?: boolean
   linkToTaskDetail?: boolean
@@ -32,13 +37,7 @@ interface TaskAppProps {
   [key: string]: unknown
 }
 
-export default function TaskApp({
-  tasks,
-  setTasks,
-  showForm,
-  countFormat,
-  onDelete,
-  showFilterBar,
+export default function TaskApp({ tasks, setTasks, showForm, countFormat, onDelete, showFilterBar,
 }: TaskAppProps) {
   const [filter, setFilter] =
     useState<FilterType>('all')
@@ -46,8 +45,51 @@ export default function TaskApp({
   const [sortOrder, setSortOrder] =
     useState<SortType>('recent')
 
-  const handleAddTask = (task: Task) => {
-    setTasks?.((prev) => [...prev, task])
+  const [searchTerm, setSearchTerm] =
+    useState('')
+
+  const [
+    debouncedSearchTerm,
+    setDebouncedSearchTerm,
+  ] = useState('')
+
+  const [
+    isSearching,
+    setIsSearching,
+  ] = useState(false)
+
+  const [editingId, setEditingId] =
+    useState<
+      string | number | null
+    >(null)
+
+  useEffect(() => {
+    if (  searchTerm !==  debouncedSearchTerm
+    ) {
+      setIsSearching(true)
+    }
+
+    const timeoutId =window.setTimeout(() => {  setDebouncedSearchTerm(    searchTerm
+        )
+
+        setIsSearching(false)
+      }, 300)
+
+    return () => {
+      clearTimeout(timeoutId)
+    }
+  }, [
+    searchTerm,
+    debouncedSearchTerm,
+  ])
+
+  const handleAddTask = (
+    task: Task
+  ) => {
+    setTasks?.((prev) => [
+      ...prev,
+      task,
+    ])
   }
 
   const handleToggle = (
@@ -58,7 +100,8 @@ export default function TaskApp({
         task.id === id
           ? {
               ...task,
-              completed: !task.completed,
+              completed:
+                !task.completed,
             }
           : task
       )
@@ -68,109 +111,151 @@ export default function TaskApp({
   const handleDelete = (
     id: string | number
   ) => {
-    setTasks?.((prev) =>
-      prev.filter(
-        (task) => task.id !== id
+    setTasks?.((prev) =>prev.filter(  (task) =>
+          task.id !== id
       )
     )
   }
 
+  const handleUpdateTask = (
+    id: string | number,
+    updates: {
+      title: string
+      description: string
+      priority: string
+    }
+  ) => {
+    setTasks?.((prev) =>
+      prev.map((task) =>
+        task.id === id
+          ? {
+              ...task,  ...updates,
+            } : task
+      )
+    )
+
+    setEditingId(null)
+  }
+
   let filteredTasks = tasks
-
-  if (filter === 'active') {
-    filteredTasks = tasks.filter(
-      (task) => !task.completed
-    )
+if (filter === 'active') { filteredTasks =   filteredTasks.filter(     (task) =>       !task.completed
+      )
   }
 
-  if (filter === 'completed') {
-    filteredTasks = tasks.filter(
-      (task) => task.completed
-    )
+  if ( filter === 'completed'
+  ) { filteredTasks = filteredTasks.filter(     (task) =>       task.completed
+      )
   }
 
-  const priorityRank = {
-    High: 3,
-    Medium: 2,
-    Low: 1,
+  if (
+    debouncedSearchTerm.trim()
+  ) {
+    const search =
+      debouncedSearchTerm.toLowerCase()
+
+    filteredTasks =
+      filteredTasks.filter(
+        (task) => task.title   .toLowerCase().includes(search) ||
+          task.description .toLowerCase() .includes(search)
+      )
   }
 
-  const sortedTasks = [...filteredTasks]
+  const priorityRank = {High: 3,Medium: 2, Low: 1,
+  }
 
-  if (sortOrder === 'high-low') {
+  const sortedTasks = [
+    ...filteredTasks,
+  ]
+
+  if (
+    sortOrder === 'high-low'
+  ) {
     sortedTasks.sort(
-      (a, b) =>
-        priorityRank[
-          b.priority as keyof typeof priorityRank
+      (a, b) =>  priorityRank[ b.priority as keyof typeof priorityRank
         ] -
-        priorityRank[
-          a.priority as keyof typeof priorityRank
-        ]
-    )
-  }
+        priorityRank[  a.priority as keyof typeof priorityRank
+        ] )}
 
-  if (sortOrder === 'low-high') {
-    sortedTasks.sort(
-      (a, b) =>
-        priorityRank[
-          a.priority as keyof typeof priorityRank
-        ] -
-        priorityRank[
-          b.priority as keyof typeof priorityRank
+  if (
+    sortOrder === 'low-high'
+  ) {
+    sortedTasks.sort( (a, b) =>   priorityRank[ a.priority as keyof typeof priorityRank ] -   priorityRank[  b.priority as keyof typeof priorityRank
         ]
-    )
-  }
+    ) }
 
-  if (sortOrder === 'alphabetical') {
+  if (
+    sortOrder ==='alphabetical'
+  ) {
     sortedTasks.sort((a, b) =>
-      a.title
-        .toLowerCase()
-        .localeCompare(
-          b.title.toLowerCase()
+      a.title  .toLowerCase().localeCompare( b.title.toLowerCase()
         )
     )
   }
 
-  const countText = showFilterBar
-    ? `Showing ${sortedTasks.length} of ${tasks.length} tasks`
-    : countFormat === 'completed'
-      ? `${
-          tasks.filter(
-            (task) => task.completed
-          ).length
-        } of ${tasks.length} completed`
-      : `${tasks.length} Tasks`
+  const countText =
+    showFilterBar
+      ? `Showing ${sortedTasks.length} of ${tasks.length} tasks`
+      : countFormat ===
+          'completed'
+        ? `${
+            tasks.filter(
+              (task) =>
+                task.completed
+            ).length
+          } of ${     tasks.length   } completed`
+        : `${tasks.length} Tasks`
 
   return (
     <>
       {showForm && (
         <TaskForm
-          onAddTask={handleAddTask}
+          onAddTask={
+            handleAddTask
+          }
         />
       )}
 
       {showFilterBar && (
-        <FilterBar
-          filter={filter}
-          onFilterChange={setFilter}
-          sortOrder={sortOrder}
-          onSortChange={setSortOrder}
+        <FilterBar     filter={filter}  onFilterChange={    setFilter
+          }sortOrder={sortOrder} onSortChange={
+            setSortOrder
+          }
+    searchTerm={
+            searchTerm
+          }  onSearchChange={
+            setSearchTerm
+          } onClearSearch={() =>
+            setSearchTerm('')
+          }
         />
       )}
 
       {showFilterBar &&
-        sortedTasks.length === 0 && (
-          <div id="filter-empty-message">
-            No tasks match this filter
+        isSearching && (
+          <div
+            id="searching-indicator"
+          >
+            Searching...
           </div>
         )}
 
-      <TaskList
-        tasks={sortedTasks}
-        countText={countText}
-        onToggle={handleToggle}
-        onDelete={
-          onDelete ?? handleDelete
+      {showFilterBar &&
+        sortedTasks.length ===
+          0 && (
+          <div id="filter-empty-message">
+            No tasks found
+          </div>
+        )}
+
+      <TaskList tasks={sortedTasks}
+        countText={countText}  onToggle={    handleToggle
+        }  onDelete={    onDelete ??    handleDelete
+        }
+        onUpdateTask={handleUpdateTask
+        }
+        editingId={ editingId
+        }
+        setEditingId={ setEditingId
         }
       />
     </>

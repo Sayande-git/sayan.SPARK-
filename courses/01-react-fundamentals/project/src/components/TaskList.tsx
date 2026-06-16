@@ -1,5 +1,3 @@
-
-
 import TaskCard from './TaskCard'
 
 export interface Task {
@@ -14,18 +12,32 @@ interface TaskListProps {
   tasks?: Task[]
   countText?: string
   onToggle?: (id: string | number) => void
-  onDelete?: (id: string | number) => void  }
+  onDelete?: (id: string | number) => void
 
+  onUpdateTask?: (
+    id: string | number,
+    updates: {
+      title: string
+      description: string
+      priority: string
+    }
+  ) => void
+
+  editingId?: string | number | null
+
+  setEditingId?: (
+    id: string | number | null
+  ) => void
+}
 
 const HARDCODED_TASKS: Task[] = [
   {
     id: 1,
     title: 'Task One',
     description: 'First hardcoded task',
-
     priority: 'High',
-    completed: false,}
-  ,
+    completed: false,
+  },
   {
     id: 2,
     title: 'Task Two',
@@ -38,7 +50,8 @@ const HARDCODED_TASKS: Task[] = [
     title: 'Task Three',
     description: 'Third hardcoded task',
     priority: 'Low',
-    completed: false,},
+    completed: false,
+  },
 ]
 
 export default function TaskList({
@@ -46,6 +59,9 @@ export default function TaskList({
   countText,
   onToggle,
   onDelete,
+  onUpdateTask,
+  editingId,
+  setEditingId,
 }: TaskListProps) {
   const list = tasks ?? HARDCODED_TASKS
 
@@ -59,13 +75,18 @@ export default function TaskList({
         {list.map((task) => (
           <TaskCard
             key={task.id}
-            taskId={task.id}
+            id={task.id}
             title={task.title}
             description={task.description}
             priority={task.priority}
             completed={task.completed}
-            onToggle={() => onToggle?.(task.id)}
+            onToggle={() =>
+              onToggle?.(task.id)
+            }
             onDelete={onDelete}
+            onUpdateTask={onUpdateTask}
+            editingId={editingId}
+            setEditingId={setEditingId}
           />
         ))}
       </section>

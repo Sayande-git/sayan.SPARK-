@@ -1,4 +1,3 @@
-
 type FilterType =
   | 'all'
   | 'active'
@@ -12,13 +11,24 @@ type SortType =
 
 interface FilterBarProps {
   filter: FilterType
+
   onFilterChange: (
     filter: FilterType
   ) => void
+
   sortOrder: SortType
+
   onSortChange: (
     sort: SortType
   ) => void
+
+  searchTerm: string
+
+  onSearchChange: (
+    value: string
+  ) => void
+
+  onClearSearch: () => void
 }
 
 export default function FilterBar({
@@ -26,6 +36,9 @@ export default function FilterBar({
   onFilterChange,
   sortOrder,
   onSortChange,
+  searchTerm,
+  onSearchChange,
+  onClearSearch,
 }: FilterBarProps) {
   return (
     <div id="filter-bar">
@@ -48,9 +61,13 @@ export default function FilterBar({
       </button>
 
       <button
-        data-active={filter === 'completed'}
+        data-active={
+          filter === 'completed'
+        }
         onClick={() =>
-          onFilterChange('completed')
+          onFilterChange(
+            'completed'
+          )
         }
       >
         Completed
@@ -81,6 +98,28 @@ export default function FilterBar({
           Alphabetical
         </option>
       </select>
+
+      <input
+        id="search-input"
+        type="text"
+        placeholder="Search tasks..."
+        value={searchTerm}
+        onChange={(e) =>
+          onSearchChange(
+            e.target.value
+          )
+        }
+      />
+
+      {searchTerm && (
+        <button
+          id="clear-search"
+          type="button"
+          onClick={onClearSearch}
+        >
+          Clear Search
+        </button>
+      )}
     </div>
   )
 }
