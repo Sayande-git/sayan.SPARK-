@@ -1,3 +1,5 @@
+
+
 import {
   useEffect,
   useState,
@@ -9,6 +11,9 @@ interface TaskCardProps {
   description: string
   priority?: string
   completed?: boolean
+
+  category?: string
+  tags?: string[]
 
   onToggle?: () => void
   onDelete?: (id: string | number) => void
@@ -35,6 +40,8 @@ export default function TaskCard({
   description,
   priority = 'Medium',
   completed = false,
+  category = 'General',
+  tags = [],
   onToggle,
   onDelete,
   onUpdateTask,
@@ -42,7 +49,8 @@ export default function TaskCard({
   setEditingId,
 }: TaskCardProps) {
   const isEditing =
-    editingId != null &&
+    editingId !== undefined &&
+    editingId !== null &&
     editingId === id
 
   const [editTitle, setEditTitle] =
@@ -117,52 +125,45 @@ export default function TaskCard({
   if (isEditing) {
     return (
       <article id="task-card">
-        <label>
-          Title
-          <input
-            type="text"
-            value={editTitle}
-            onChange={(e) =>
-              setEditTitle(
-                e.target.value
-              )
-            }
-          />
-        </label>
+        <input
+          type="text"
+          value={editTitle}
+          onChange={(e) =>
+            setEditTitle(
+              e.target.value
+            )
+          }
+        />
 
-        <label>
-          Description
-          <textarea
-            value={editDescription}
-            onChange={(e) =>
-              setEditDescription(
-                e.target.value
-              )
-            }
-          />
-        </label>
+        <textarea
+          value={editDescription}
+          onChange={(e) =>
+            setEditDescription(
+              e.target.value
+            )
+          }
+        />
 
-        <label>
-          Priority
-          <select
-            value={editPriority}
-            onChange={(e) =>
-              setEditPriority(
-                e.target.value
-              )
-            }
-          >
-            <option value="High">
-              High
-            </option>
-            <option value="Medium">
-              Medium
-            </option>
-            <option value="Low">
-              Low
-            </option>
-          </select>
-        </label>
+        <select
+          value={editPriority}
+          onChange={(e) =>
+            setEditPriority(
+              e.target.value
+            )
+          }
+        >
+          <option value="High">
+            High
+          </option>
+
+          <option value="Medium">
+            Medium
+          </option>
+
+          <option value="Low">
+            Low
+          </option>
+        </select>
 
         <button
           type="button"
@@ -219,7 +220,35 @@ export default function TaskCard({
         {description}
       </p>
 
-      <p>{priority}</p>
+      <p>
+        Priority: {priority}
+      </p>
+
+      <div id="task-category">
+        {category}
+      </div>
+
+      <div id="task-tags">
+        {tags.map((tag) => (
+          <span
+            key={tag}
+            data-tag={tag}
+            style={{
+              display:
+                'inline-block',
+              marginRight: '6px',
+              padding:
+                '2px 8px',
+              border:
+                '1px solid #ccc',
+              borderRadius:
+                '999px',
+            }}
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
 
       <button
         type="button"
@@ -233,7 +262,11 @@ export default function TaskCard({
       </button>
 
       {onDelete && (
-        <button onClick={handleDelete}>
+        <button
+          onClick={
+            handleDelete
+          }
+        >
           Delete
         </button>
       )}

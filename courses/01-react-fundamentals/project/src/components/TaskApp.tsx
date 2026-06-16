@@ -1,3 +1,4 @@
+
 import React, {
   useEffect,
   useState,
@@ -26,10 +27,7 @@ interface TaskAppProps {
   showForm?: boolean
   countFormat?: string
 
-  onDelete?: (
-    id: string | number
-  ) => void
-
+  onDelete?: (id: string | number) => void
   showFilterBar?: boolean
   showStatsPanel?: boolean
   linkToTaskDetail?: boolean
@@ -37,7 +35,13 @@ interface TaskAppProps {
   [key: string]: unknown
 }
 
-export default function TaskApp({ tasks, setTasks, showForm, countFormat, onDelete, showFilterBar,
+export default function TaskApp({
+  tasks,
+  setTasks,
+  showForm,
+  countFormat,
+  onDelete,
+  showFilterBar,
 }: TaskAppProps) {
   const [filter, setFilter] =
     useState<FilterType>('all')
@@ -45,43 +49,55 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, onDele
   const [sortOrder, setSortOrder] =
     useState<SortType>('recent')
 
-  const [searchTerm, setSearchTerm] =
+  const [searchInput, setSearchInput] =
     useState('')
 
-  const [
-    debouncedSearchTerm,
-    setDebouncedSearchTerm,
-  ] = useState('')
+  const [search, setSearch] =
+    useState('')
 
-  const [
-    isSearching,
-    setIsSearching,
-  ] = useState(false)
+  const [isSearching, setIsSearching] =
+    useState(false)
 
   const [editingId, setEditingId] =
-    useState<
-      string | number | null
-    >(null)
+    useState<string | number | null>(null)
 
+ 
+const [
+  selectedCategory,
+  setSelectedCategory,
+] = useState(
+  'All categories'
+)
+
+const categories = [
+  ...new Set(
+    tasks.map(
+      (task) =>
+        task.category ??
+        'General'
+    )
+  ),
+]
   useEffect(() => {
-    if (  searchTerm !==  debouncedSearchTerm
-    ) {
-      setIsSearching(true)
+    if (searchInput === search) {
+      setIsSearching(false)
+      return
     }
 
-    const timeoutId =window.setTimeout(() => {  setDebouncedSearchTerm(    searchTerm
-        )
+    setIsSearching(true)
 
+    const timeoutId = window.setTimeout(
+      () => {
+        setSearch(searchInput)
         setIsSearching(false)
-      }, 300)
+      },
+      300
+    )
 
     return () => {
       clearTimeout(timeoutId)
     }
-  }, [
-    searchTerm,
-    debouncedSearchTerm,
-  ])
+  }, [searchInput, search])
 
   const handleAddTask = (
     task: Task
@@ -111,8 +127,9 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, onDele
   const handleDelete = (
     id: string | number
   ) => {
-    setTasks?.((prev) =>prev.filter(  (task) =>
-          task.id !== id
+    setTasks?.((prev) =>
+      prev.filter(
+        (task) => task.id !== id
       )
     )
   }
@@ -129,8 +146,10 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, onDele
       prev.map((task) =>
         task.id === id
           ? {
-              ...task,  ...updates,
-            } : task
+              ...task,
+              ...updates,
+            }
+          : task
       )
     )
 
@@ -138,56 +157,98 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, onDele
   }
 
   let filteredTasks = tasks
-if (filter === 'active') { filteredTasks =   filteredTasks.filter(     (task) =>       !task.completed
+
+  if (filter === 'active') {
+    filteredTasks =
+      filteredTasks.filter(
+        (task) =>
+          !task.completed
       )
   }
 
-  if ( filter === 'completed'
-  ) { filteredTasks = filteredTasks.filter(     (task) =>       task.completed
+  if (filter === 'completed') {
+    filteredTasks =
+      filteredTasks.filter(
+        (task) =>
+          task.completed
       )
   }
 
   if (
-    debouncedSearchTerm.trim()
-  ) {
-    const search =
-      debouncedSearchTerm.toLowerCase()
+  selectedCategory !==
+  'All categories'
+) {
+  filteredTasks =
+    filteredTasks.filter(
+      (task) =>
+        task.category ===
+        selectedCategory
+    )
+}
+
+  if (search.trim()) {
+    const searchLower =
+      search.toLowerCase()
 
     filteredTasks =
       filteredTasks.filter(
-        (task) => task.title   .toLowerCase().includes(search) ||
-          task.description .toLowerCase() .includes(search)
+        (task) =>
+          task.title
+            .toLowerCase()
+            .includes(
+              searchLower
+            ) ||
+          task.description
+            .toLowerCase()
+            .includes(
+              searchLower
+            )
       )
   }
 
-  const priorityRank = {High: 3,Medium: 2, Low: 1,
+  const priorityRank = {
+    High: 3,
+    Medium: 2,
+    Low: 1,
   }
 
   const sortedTasks = [
     ...filteredTasks,
   ]
 
-  if (
-    sortOrder === 'high-low'
-  ) {
+  if (sortOrder === 'high-low') {
     sortedTasks.sort(
-      (a, b) =>  priorityRank[ b.priority as keyof typeof priorityRank
+      (a, b) =>
+        priorityRank[
+          b.priority as keyof typeof priorityRank
         ] -
-        priorityRank[  a.priority as keyof typeof priorityRank
-        ] )}
-
-  if (
-    sortOrder === 'low-high'
-  ) {
-    sortedTasks.sort( (a, b) =>   priorityRank[ a.priority as keyof typeof priorityRank ] -   priorityRank[  b.priority as keyof typeof priorityRank
+        priorityRank[
+          a.priority as keyof typeof priorityRank
         ]
-    ) }
+    )
+  }
+
+  if (sortOrder === 'low-high') {
+    sortedTasks.sort(
+      (a, b) =>
+        priorityRank[
+          a.priority as keyof typeof priorityRank
+        ] -
+        priorityRank[
+          b.priority as keyof typeof priorityRank
+        ]
+    )
+  }
 
   if (
-    sortOrder ==='alphabetical'
+    sortOrder ===
+    'alphabetical'
   ) {
     sortedTasks.sort((a, b) =>
-      a.title  .toLowerCase().localeCompare( b.title.toLowerCase()
+      a.title
+        .toLowerCase()
+        .localeCompare(
+          b.title.toLowerCase()
         )
     )
   }
@@ -202,7 +263,9 @@ if (filter === 'active') { filteredTasks =   filteredTasks.filter(     (task) =>
               (task) =>
                 task.completed
             ).length
-          } of ${     tasks.length   } completed`
+          } of ${
+            tasks.length
+          } completed`
         : `${tasks.length} Tasks`
 
   return (
@@ -216,28 +279,36 @@ if (filter === 'active') { filteredTasks =   filteredTasks.filter(     (task) =>
       )}
 
       {showFilterBar && (
-        <FilterBar     filter={filter}  onFilterChange={    setFilter
-          }sortOrder={sortOrder} onSortChange={
-            setSortOrder
-          }
-    searchTerm={
-            searchTerm
-          }  onSearchChange={
-            setSearchTerm
-          } onClearSearch={() =>
-            setSearchTerm('')
-          }
-        />
-      )}
+        <>
+          <FilterBar
+  filter={filter}
+  onFilterChange={
+    setFilter
+  }
+  sortOrder={sortOrder}
+  onSortChange={
+    setSortOrder
+  }
+  search={searchInput}
+  onSearchChange={
+    setSearchInput
+  }
+  categories={categories}
+  selectedCategory={
+    selectedCategory
+  }
+  onCategoryChange={
+    setSelectedCategory
+  }
+/>
 
-      {showFilterBar &&
-        isSearching && (
-          <div
-            id="searching-indicator"
-          >
-            Searching...
-          </div>
-        )}
+          {isSearching && (
+            <div id="searching-indicator">
+              Searching...
+            </div>
+          )}
+        </>
+      )}
 
       {showFilterBar &&
         sortedTasks.length ===
@@ -247,15 +318,24 @@ if (filter === 'active') { filteredTasks =   filteredTasks.filter(     (task) =>
           </div>
         )}
 
-      <TaskList tasks={sortedTasks}
-        countText={countText}  onToggle={    handleToggle
-        }  onDelete={    onDelete ??    handleDelete
+      <TaskList
+        tasks={sortedTasks}
+        countText={countText}
+        onToggle={
+          handleToggle
         }
-        onUpdateTask={handleUpdateTask
+        onDelete={
+          onDelete ??
+          handleDelete
         }
-        editingId={ editingId
+        onUpdateTask={
+          handleUpdateTask
         }
-        setEditingId={ setEditingId
+        editingId={
+          editingId
+        }
+        setEditingId={
+          setEditingId
         }
       />
     </>

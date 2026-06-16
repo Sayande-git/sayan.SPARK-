@@ -1,3 +1,5 @@
+
+
 type FilterType =
   | 'all'
   | 'active'
@@ -22,13 +24,19 @@ interface FilterBarProps {
     sort: SortType
   ) => void
 
-  searchTerm: string
+  search: string
 
   onSearchChange: (
     value: string
   ) => void
 
-  onClearSearch: () => void
+  categories: string[]
+
+  selectedCategory: string
+
+  onCategoryChange: (
+    category: string
+  ) => void
 }
 
 export default function FilterBar({
@@ -36,12 +44,38 @@ export default function FilterBar({
   onFilterChange,
   sortOrder,
   onSortChange,
-  searchTerm,
+  search,
   onSearchChange,
-  onClearSearch,
+  categories,
+  selectedCategory,
+  onCategoryChange,
 }: FilterBarProps) {
   return (
     <div id="filter-bar">
+      <input
+        id="search-input"
+        type="text"
+        placeholder="Search tasks"
+        value={search}
+        onChange={(e) =>
+          onSearchChange(
+            e.target.value
+          )
+        }
+      />
+
+      {search && (
+        <button
+          id="clear-search"
+          type="button"
+          onClick={() =>
+            onSearchChange('')
+          }
+        >
+          Clear search
+        </button>
+      )}
+
       <button
         data-active={filter === 'all'}
         onClick={() =>
@@ -52,7 +86,9 @@ export default function FilterBar({
       </button>
 
       <button
-        data-active={filter === 'active'}
+        data-active={
+          filter === 'active'
+        }
         onClick={() =>
           onFilterChange('active')
         }
@@ -74,11 +110,37 @@ export default function FilterBar({
       </button>
 
       <select
+        id="category-filter"
+        value={selectedCategory}
+        onChange={(e) =>
+          onCategoryChange(
+            e.target.value
+          )
+        }
+      >
+        <option value="All categories">
+          All categories
+        </option>
+
+        {categories.map(
+          (category) => (
+            <option
+              key={category}
+              value={category}
+            >
+              {category}
+            </option>
+          )
+        )}
+      </select>
+
+      <select
         id="sort-order"
         value={sortOrder}
         onChange={(e) =>
           onSortChange(
-            e.target.value as SortType
+            e.target
+              .value as SortType
           )
         }
       >
@@ -98,28 +160,6 @@ export default function FilterBar({
           Alphabetical
         </option>
       </select>
-
-      <input
-        id="search-input"
-        type="text"
-        placeholder="Search tasks..."
-        value={searchTerm}
-        onChange={(e) =>
-          onSearchChange(
-            e.target.value
-          )
-        }
-      />
-
-      {searchTerm && (
-        <button
-          id="clear-search"
-          type="button"
-          onClick={onClearSearch}
-        >
-          Clear Search
-        </button>
-      )}
     </div>
   )
 }
