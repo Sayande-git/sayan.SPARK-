@@ -1,4 +1,4 @@
-
+import StatsPanel from './StatsPanel'
 import React, {
   useEffect,
   useState,
@@ -6,7 +6,7 @@ import React, {
 import TaskForm from './TaskForm'
 import TaskList, { Task } from './TaskList'
 import FilterBar from './FilterBar'
-
+import { useTheme } from '../contexts/ThemeContext'
 type FilterType =
   | 'all'
   | 'active'
@@ -17,6 +17,7 @@ type SortType =
   | 'high-low'
   | 'low-high'
   | 'alphabetical'
+  | 'due-date'
 
 interface TaskAppProps {
   tasks: Task[]
@@ -34,7 +35,6 @@ interface TaskAppProps {
 
   [key: string]: unknown
 }
-
 export default function TaskApp({
   tasks,
   setTasks,
@@ -42,8 +42,12 @@ export default function TaskApp({
   countFormat,
   onDelete,
   showFilterBar,
-}: TaskAppProps) {
+  showStatsPanel,
+}: TaskAppProps)
+ { const { theme, toggleTheme } =
+  useTheme()
   const [filter, setFilter] =
+  
     useState<FilterType>('all')
 
   const [sortOrder, setSortOrder] =
@@ -252,6 +256,26 @@ const categories = [
         )
     )
   }
+  if (sortOrder === 'due-date') {
+  sortedTasks.sort((a, b) => {
+    if (!a.dueDate && !b.dueDate) {
+      return 0
+    }
+
+    if (!a.dueDate) {
+      return 1
+    }
+
+    if (!b.dueDate) {
+      return -1
+    }
+
+    return (
+      new Date(a.dueDate).getTime() -
+      new Date(b.dueDate).getTime()
+    )
+  })
+}
 
   const countText =
     showFilterBar
@@ -268,8 +292,21 @@ const categories = [
           } completed`
         : `${tasks.length} Tasks`
 
-  return (
-    <>
+ return (
+  <div data-theme={theme}
+    style={{
+      backgroundColor: theme === 'dark'? '#111827': '#ffffff',
+      color: theme === 'dark' ? '#ffffff' : '#000000',
+       minHeight: '100vh',
+       padding: '1rem',
+    }}
+  >
+    <div style={{
+    marginBottom: '1rem'}}>
+  <button id="theme-toggle"
+    onClick={toggleTheme}>
+    {theme === 'light'? 'Dark Mode': 'Light Mode'}</button>
+</div>
       {showForm && (
         <TaskForm
           onAddTask={
@@ -277,7 +314,9 @@ const categories = [
           }
         />
       )}
-
+{showStatsPanel && (
+  <StatsPanel tasks={tasks} />
+)}
       {showFilterBar && (
         <>
           <FilterBar
@@ -334,10 +373,8 @@ const categories = [
         editingId={
           editingId
         }
-        setEditingId={
-          setEditingId
-        }
+        setEditingId={setEditingId}
       />
-    </>
+      </div>
   )
 }

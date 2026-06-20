@@ -1,11 +1,11 @@
 {
   "courseId": "01-react-fundamentals",
   "courseName": "React Fundamentals",
-  "lastUpdated": "2026-06-16T20:46:42.171Z",
+  "lastUpdated": "2026-06-20T10:11:22.242Z",
   "totalChallenges": 23,
-  "completedChallenges": 12,
-  "averageScore": 93.7,
-  "completionPercentage": 52.2,
+  "completedChallenges": 15,
+  "averageScore": 91.8,
+  "completionPercentage": 65.2,
   "badgeLevel": "bronze",
   "challengeResults": [
     {
@@ -79,6 +79,30 @@
       "challengeName": "Categories and Tags",
       "score": 98.2,
       "passed": true
+    },
+    {
+      "challengeId": "13-due-dates-and-sorting",
+      "challengeName": "Due Dates and Sorting",
+      "score": 97.45,
+      "passed": true
+    },
+    {
+      "challengeId": "14-task-statistics-dashboard",
+      "challengeName": "Task Statistics Dashboard",
+      "score": 86.545,
+      "passed": true
+    },
+    {
+      "challengeId": "15-component-organization",
+      "challengeName": "Component Organization with Props",
+      "score": 98.2,
+      "passed": true
+    },
+    {
+      "challengeId": "16-context-api-theme",
+      "challengeName": "Context API - Theme Management",
+      "score": 62.599999999999994,
+      "passed": false
     }
   ],
   "skillStrengths": [
@@ -93,7 +117,12 @@
     "Search Functionality",
     "useEffect - Local Storage Persistence",
     "useEffect - Debounced Search",
-    "Categories and Tags"
+    "Categories and Tags",
+    "Due Dates and Sorting",
+    "Task Statistics Dashboard",
+    "Component Organization with Props"
   ],
-  "improvementAreas": []
+  "improvementAreas": [
+    "Context API - Theme Management"
+  ]
 }

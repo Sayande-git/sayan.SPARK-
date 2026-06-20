@@ -1,23 +1,23 @@
 {
-  "lastUpdated": "2026-06-16T20:46:42.260Z",
+  "lastUpdated": "2026-06-20T10:11:22.313Z",
   "pathway": {
     "name": "Modern React Engineer",
     "version": "1.0.0",
-    "overallScore": 30.9,
-    "completionPercentage": 22.6,
+    "overallScore": 30.3,
+    "completionPercentage": 28.3,
     "badgeLevel": "none",
     "totalChallenges": 53,
-    "completedChallenges": 12
+    "completedChallenges": 15
   },
   "courses": {
     "01-react-fundamentals": {
       "courseId": "01-react-fundamentals",
       "courseName": "React Fundamentals",
-      "averageScore": 93.7,
-      "completionPercentage": 52.2,
+      "averageScore": 91.8,
+      "completionPercentage": 65.2,
       "badgeLevel": "bronze",
       "totalChallenges": 23,
-      "completedChallenges": 12,
+      "completedChallenges": 15,
       "challenges": {
         "01-static-task-display": {
           "challengeId": "01-static-task-display",
@@ -193,6 +193,66 @@
           "scores": {
             "functionalTests": 100,
             "codeQuality": 100,
+            "architecture": 100,
+            "bestPractices": 100,
+            "e2eTests": 100,
+            "aiReview": 88
+          }
+        },
+        "13-due-dates-and-sorting": {
+          "challengeId": "13-due-dates-and-sorting",
+          "challengeName": "Due Dates and Sorting",
+          "passed": true,
+          "score": 97.45,
+          "lastRun": "2026-06-20T06:46:37.782Z",
+          "scores": {
+            "functionalTests": 100,
+            "codeQuality": 100,
+            "architecture": 100,
+            "bestPractices": 100,
+            "e2eTests": 100,
+            "aiReview": 83
+          }
+        },
+        "14-task-statistics-dashboard": {
+          "challengeId": "14-task-statistics-dashboard",
+          "challengeName": "Task Statistics Dashboard",
+          "passed": true,
+          "score": 86.545,
+          "lastRun": "2026-06-20T07:56:54.315Z",
+          "scores": {
+            "functionalTests": 66.7,
+            "codeQuality": 100,
+            "architecture": 100,
+            "bestPractices": 100,
+            "e2eTests": 100,
+            "aiReview": 88
+          }
+        },
+        "15-component-organization": {
+          "challengeId": "15-component-organization",
+          "challengeName": "Component Organization with Props",
+          "passed": true,
+          "score": 98.2,
+          "lastRun": "2026-06-20T08:09:36.782Z",
+          "scores": {
+            "functionalTests": 100,
+            "codeQuality": 100,
+            "architecture": 100,
+            "bestPractices": 100,
+            "e2eTests": 100,
+            "aiReview": 88
+          }
+        },
+        "16-context-api-theme": {
+          "challengeId": "16-context-api-theme",
+          "challengeName": "Context API - Theme Management",
+          "passed": false,
+          "score": 62.599999999999994,
+          "lastRun": "2026-06-20T10:11:11.682Z",
+          "scores": {
+            "functionalTests": 0,
+            "codeQuality": 96,
             "architecture": 100,
             "bestPractices": 100,
             "e2eTests": 100,
