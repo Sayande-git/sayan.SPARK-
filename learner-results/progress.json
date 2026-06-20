@@ -1,23 +1,23 @@
 {
-  "lastUpdated": "2026-06-20T10:11:22.313Z",
+  "lastUpdated": "2026-06-20T22:27:50.875Z",
   "pathway": {
     "name": "Modern React Engineer",
     "version": "1.0.0",
-    "overallScore": 30.3,
-    "completionPercentage": 28.3,
+    "overallScore": 30.8,
+    "completionPercentage": 43.4,
     "badgeLevel": "none",
     "totalChallenges": 53,
-    "completedChallenges": 15
+    "completedChallenges": 23
   },
   "courses": {
     "01-react-fundamentals": {
       "courseId": "01-react-fundamentals",
       "courseName": "React Fundamentals",
-      "averageScore": 91.8,
-      "completionPercentage": 65.2,
-      "badgeLevel": "bronze",
+      "averageScore": 93.2,
+      "completionPercentage": 100,
+      "badgeLevel": "gold",
       "totalChallenges": 23,
-      "completedChallenges": 15,
+      "completedChallenges": 23,
       "challenges": {
         "01-static-task-display": {
           "challengeId": "01-static-task-display",
@@ -247,15 +247,120 @@
         "16-context-api-theme": {
           "challengeId": "16-context-api-theme",
           "challengeName": "Context API - Theme Management",
-          "passed": false,
-          "score": 62.599999999999994,
-          "lastRun": "2026-06-20T10:11:11.682Z",
+          "passed": true,
+          "score": 97.60000000000001,
+          "lastRun": "2026-06-20T19:50:00.454Z",
           "scores": {
-            "functionalTests": 0,
+            "functionalTests": 100,
             "codeQuality": 96,
             "architecture": 100,
             "bestPractices": 100,
             "e2eTests": 100,
+            "aiReview": 88
+          }
+        },
+        "17-custom-hook-uselocalstorage": {
+          "challengeId": "17-custom-hook-uselocalstorage",
+          "challengeName": "Custom Hook - useLocalStorage",
+          "passed": true,
+          "score": 96.10000000000001,
+          "lastRun": "2026-06-20T20:00:47.294Z",
+          "scores": {
+            "functionalTests": 100,
+            "codeQuality": 86,
+            "architecture": 100,
+            "bestPractices": 100,
+            "e2eTests": 100,
+            "aiReview": 88
+          }
+        },
+        "18-usereducer-complex-state": {
+          "challengeId": "18-usereducer-complex-state",
+          "challengeName": "useReducer - Complex State Management",
+          "passed": true,
+          "score": 94.45,
+          "lastRun": "2026-06-20T20:53:15.386Z",
+          "scores": {
+            "functionalTests": 100,
+            "codeQuality": 80,
+            "architecture": 100,
+            "bestPractices": 100,
+            "e2eTests": 100,
+            "aiReview": 83
+          }
+        },
+        "19-performance-optimization": {
+          "challengeId": "19-performance-optimization",
+          "challengeName": "Performance Optimization",
+          "passed": true,
+          "score": 94.45,
+          "lastRun": "2026-06-20T21:13:41.994Z",
+          "scores": {
+            "functionalTests": 100,
+            "codeQuality": 80,
+            "architecture": 100,
+            "bestPractices": 100,
+            "e2eTests": 100,
+            "aiReview": 83
+          }
+        },
+        "20-error-boundaries": {
+          "challengeId": "20-error-boundaries",
+          "challengeName": "Error Boundaries and Error Handling",
+          "passed": true,
+          "score": 81.7,
+          "lastRun": "2026-06-20T21:41:23.192Z",
+          "scores": {
+            "functionalTests": 100,
+            "codeQuality": 90,
+            "architecture": 100,
+            "bestPractices": 100,
+            "e2eTests": 0,
+            "aiReview": 88
+          }
+        },
+        "21-react-router": {
+          "challengeId": "21-react-router",
+          "challengeName": "React Router - Routing and Navigation",
+          "passed": true,
+          "score": 83.5,
+          "lastRun": "2026-06-20T22:15:15.092Z",
+          "scores": {
+            "functionalTests": 100,
+            "codeQuality": 90,
+            "architecture": 100,
+            "bestPractices": 100,
+            "e2eTests": 100,
+            "aiReview": 0
+          }
+        },
+        "22-data-fetching": {
+          "challengeId": "22-data-fetching",
+          "challengeName": "Data Fetching - Loading and Error State",
+          "passed": true,
+          "score": 98.2,
+          "lastRun": "2026-06-20T22:18:26.837Z",
+          "scores": {
+            "functionalTests": 100,
+            "codeQuality": 100,
+            "architecture": 100,
+            "bestPractices": 100,
+            "e2eTests": 100,
+            "aiReview": 88
+          }
+        },
+        "23-useref-focus-management": {
+          "challengeId": "23-useref-focus-management",
+          "challengeName": "useRef - Focus Management",
+          "passed": true,
+          "score": 91.705,
+          "lastRun": "2026-06-20T22:27:33.596Z",
+          "scores": {
+            "functionalTests": 100,
+            "codeQuality": 90,
+            "architecture": 100,
+            "bestPractices": 100,
+            "e2eTests": 66.7,
             "aiReview": 88
           }
         }

@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import {
+  useState,
+} from 'react'
 
 export default function useLocalStorage<T>(
   key: string,
@@ -8,13 +10,17 @@ export default function useLocalStorage<T>(
     useState<T>(() => {
       try {
         const item =
-          window.localStorage.getItem(
+          localStorage.getItem(
             key
           )
 
-        return item
-          ? JSON.parse(item)
-          : initialValue
+        if (!item) {
+          return initialValue
+        }
+
+        return JSON.parse(
+          item
+        ) as T
       } catch {
         return initialValue
       }
@@ -29,23 +35,24 @@ export default function useLocalStorage<T>(
   ) => {
     try {
       const valueToStore =
-        value instanceof
-        Function
-          ? value(storedValue)
+        value instanceof Function
+          ? value(
+              storedValue
+            )
           : value
 
       setStoredValue(
         valueToStore
       )
 
-      window.localStorage.setItem(
+      localStorage.setItem(
         key,
         JSON.stringify(
           valueToStore
         )
       )
     } catch {
-      // ignore
+      // ignore storage errors
     }
   }
 

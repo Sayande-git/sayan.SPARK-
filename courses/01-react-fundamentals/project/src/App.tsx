@@ -61,8 +61,7 @@ const INITIAL_TASKS: Task[] = [
   },
 ]
 
-const STORAGE_KEY =
-  'task-app-tasks'
+
 
 function AppContent() {
 const [

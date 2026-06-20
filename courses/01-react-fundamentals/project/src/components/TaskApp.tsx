@@ -5,7 +5,10 @@ import FilterBar from './FilterBar'
 import StatsPanel from './StatsPanel'
 import { useMemo } from 'react'
 import { useTheme } from '../contexts/ThemeContext'
+import ErrorBoundary from './ErrorBoundary'
+
 import {ADD_TASK,UPDATE_TASK,DELETE_TASK,TOGGLE_TASK,} from '../reducers/taskReducer'
+
 type FilterType =
   | 'all'
   | 'active'
@@ -35,12 +38,13 @@ interface TaskAppProps {
 
 export default function TaskApp({
   tasks,
-    dispatch,
+  dispatch,
   showForm,
   countFormat,
   onDelete,
   showFilterBar,
   showStatsPanel,
+  linkToTaskDetail = false,
 }: TaskAppProps) {
   const [filter, setFilter] =
     useState<FilterType>('all')
@@ -439,26 +443,29 @@ const sortedTasks = useMemo(() => {
           overdue={stats.overdue}
       />
       )}
-      <TaskList
-        tasks={sortedTasks}
-        countText={countText}
-        onToggle={
-          handleToggle
-        }
-        onDelete={
-          onDelete ??
-          handleDelete
-        }
-        onUpdateTask={
-          handleUpdateTask
-        }
-        editingId={
-          editingId
-        }
-        setEditingId={
-          setEditingId
-        }
-      />
+      <ErrorBoundary>
+  <TaskList
+  tasks={sortedTasks}
+  linkToTaskDetail={
+    linkToTaskDetail
+  }
+    countText={countText}
+    onToggle={handleToggle}
+    onDelete={
+      onDelete ??
+      handleDelete
+    }
+    onUpdateTask={
+      handleUpdateTask
+    }
+    editingId={
+      editingId
+    }
+    setEditingId={
+      setEditingId
+    }
+  />
+</ErrorBoundary>
     </div>
   )
 }

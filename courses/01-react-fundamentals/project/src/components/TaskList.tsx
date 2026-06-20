@@ -10,14 +10,15 @@ export interface Task {
   tags: string[]
   dueDate?: string
 }
-
 interface TaskListProps {
   tasks?: Task[]
   countText?: string
+  linkToTaskDetail?: boolean
   onToggle?: (id: string | number) => void
   onDelete?: (id: string | number) => void
   onUpdateTask?: (
     id: string | number,
+  
     updates: {
       title: string
       description: string
@@ -63,6 +64,7 @@ const HARDCODED_TASKS: Task[] = [
 export default function TaskList({
   tasks,
   countText,
+  linkToTaskDetail,
   onToggle,
   onDelete,
   onUpdateTask,
@@ -81,6 +83,7 @@ export default function TaskList({
             key={task.id}
             id={task.id}
             title={task.title}
+            linkToTaskDetail={linkToTaskDetail}
             description={task.description}
             priority={task.priority}
             completed={task.completed}
