@@ -1,4 +1,4 @@
-import {useEffect,useState,} from 'react'
+import React, {useEffect,useState,} from 'react'
 
 interface TaskCardProps {
   id?: string | number
@@ -26,7 +26,7 @@ editingId?: string | number | null
   setEditingId?: ( id: string | number | null) => void
 }
 
-export default function TaskCard({
+function TaskCard({
   id,title,description,priority = 'Medium',completed = false,category = 'General',tags = [],
   dueDate, onToggle, onDelete, onUpdateTask, editingId, setEditingId}: TaskCardProps) {
   const isEditing = editingId !== undefined && editingId !== null && editingId === id
@@ -185,3 +185,4 @@ export default function TaskCard({
     </article>
   )
 }
+export default React.memo(TaskCard)

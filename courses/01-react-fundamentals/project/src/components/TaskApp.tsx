@@ -1,12 +1,11 @@
-import StatsPanel from './StatsPanel'
-import React, {
-  useEffect,
-  useState,
-} from 'react'
+import React, {useEffect,useState,useCallback,} from 'react'
 import TaskForm from './TaskForm'
 import TaskList, { Task } from './TaskList'
 import FilterBar from './FilterBar'
+import StatsPanel from './StatsPanel'
+import { useMemo } from 'react'
 import { useTheme } from '../contexts/ThemeContext'
+import {ADD_TASK,UPDATE_TASK,DELETE_TASK,TOGGLE_TASK,} from '../reducers/taskReducer'
 type FilterType =
   | 'all'
   | 'active'
@@ -21,9 +20,7 @@ type SortType =
 
 interface TaskAppProps {
   tasks: Task[]
-  setTasks?: React.Dispatch<
-    React.SetStateAction<Task[]>
-  >
+  dispatch?: React.Dispatch<any>
 
   showForm?: boolean
   countFormat?: string
@@ -35,19 +32,17 @@ interface TaskAppProps {
 
   [key: string]: unknown
 }
+
 export default function TaskApp({
   tasks,
-  setTasks,
+    dispatch,
   showForm,
   countFormat,
   onDelete,
   showFilterBar,
   showStatsPanel,
-}: TaskAppProps)
- { const { theme, toggleTheme } =
-  useTheme()
+}: TaskAppProps) {
   const [filter, setFilter] =
-  
     useState<FilterType>('all')
 
   const [sortOrder, setSortOrder] =
@@ -64,7 +59,10 @@ export default function TaskApp({
 
   const [editingId, setEditingId] =
     useState<string | number | null>(null)
-
+  const {
+    theme,
+    toggleTheme,
+  } = useTheme()
  
 const [
   selectedCategory,
@@ -82,6 +80,43 @@ const categories = [
     )
   ),
 ]
+const stats = useMemo(() => {
+  const total = tasks.length
+
+  const completed =
+    tasks.filter(
+      (task) =>
+        task.completed
+    ).length
+
+  const active =
+    total - completed
+
+  const overdue =
+    tasks.filter(
+      (task) => {
+        if (
+          !task.dueDate ||
+          task.completed
+        ) {
+          return false
+        }
+
+        return (
+          new Date(
+            task.dueDate
+          ) < new Date()
+        )
+      }
+    ).length
+
+  return {
+    total,
+    completed,
+    active,
+    overdue,
+  }
+}, [tasks])
   useEffect(() => {
     if (searchInput === search) {
       setIsSearching(false)
@@ -103,63 +138,66 @@ const categories = [
     }
   }, [searchInput, search])
 
-  const handleAddTask = (
-    task: Task
-  ) => {
-    setTasks?.((prev) => [
-      ...prev,
-      task,
-    ])
-  }
+ const handleAddTask =
+  useCallback(
+    (task: Task) => {
+      dispatch?.({
+        type: ADD_TASK,
+        payload: task,
+      })
+    },
+    [dispatch]
+  )
 
-  const handleToggle = (
-    id: string | number
-  ) => {
-    setTasks?.((prev) =>
-      prev.map((task) =>
-        task.id === id
-          ? {
-              ...task,
-              completed:
-                !task.completed,
-            }
-          : task
-      )
-    )
-  }
+const handleToggle =
+  useCallback(
+    (
+      id: string | number
+    ) => {
+      dispatch?.({
+        type: TOGGLE_TASK,
+        payload: id,
+      })
+    },
+    [dispatch]
+  )
 
-  const handleDelete = (
-    id: string | number
-  ) => {
-    setTasks?.((prev) =>
-      prev.filter(
-        (task) => task.id !== id
-      )
-    )
-  }
+const handleDelete =
+  useCallback(
+    (
+      id: string | number
+    ) => {
+      dispatch?.({
+        type: DELETE_TASK,
+        payload: id,
+      })
+    },
+    [dispatch]
+  )
+const handleUpdateTask =
+  useCallback(
+    (
+      id: string | number,
+      updates: {
+        title: string
+        description: string
+        priority: string
+      }
+    ) => {
+      dispatch?.({
+        type: UPDATE_TASK,
+        payload: {
+          id,
+          updates,
+        },
+      })
 
-  const handleUpdateTask = (
-    id: string | number,
-    updates: {
-      title: string
-      description: string
-      priority: string
-    }
-  ) => {
-    setTasks?.((prev) =>
-      prev.map((task) =>
-        task.id === id
-          ? {
-              ...task,
-              ...updates,
-            }
-          : task
-      )
-    )
+      setEditingId(null)
+    },
+    [dispatch]
+  )
 
-    setEditingId(null)
-  }
-
+const sortedTasks = useMemo(() => {
   let filteredTasks = tasks
 
   if (filter === 'active') {
@@ -179,16 +217,16 @@ const categories = [
   }
 
   if (
-  selectedCategory !==
-  'All categories'
-) {
-  filteredTasks =
-    filteredTasks.filter(
-      (task) =>
-        task.category ===
-        selectedCategory
-    )
-}
+    selectedCategory !==
+    'All categories'
+  ) {
+    filteredTasks =
+      filteredTasks.filter(
+        (task) =>
+          task.category ===
+          selectedCategory
+      )
+  }
 
   if (search.trim()) {
     const searchLower =
@@ -220,7 +258,10 @@ const categories = [
     ...filteredTasks,
   ]
 
-  if (sortOrder === 'high-low') {
+  if (
+    sortOrder ===
+    'high-low'
+  ) {
     sortedTasks.sort(
       (a, b) =>
         priorityRank[
@@ -232,7 +273,10 @@ const categories = [
     )
   }
 
-  if (sortOrder === 'low-high') {
+  if (
+    sortOrder ===
+    'low-high'
+  ) {
     sortedTasks.sort(
       (a, b) =>
         priorityRank[
@@ -256,26 +300,48 @@ const categories = [
         )
     )
   }
-  if (sortOrder === 'due-date') {
-  sortedTasks.sort((a, b) => {
-    if (!a.dueDate && !b.dueDate) {
-      return 0
-    }
 
-    if (!a.dueDate) {
-      return 1
-    }
+  if (
+    sortOrder ===
+    'due-date'
+  ) {
+    sortedTasks.sort(
+      (a, b) => {
+        if (
+          !a.dueDate &&
+          !b.dueDate
+        ) {
+          return 0
+        }
 
-    if (!b.dueDate) {
-      return -1
-    }
+        if (!a.dueDate) {
+          return 1
+        }
 
-    return (
-      new Date(a.dueDate).getTime() -
-      new Date(b.dueDate).getTime()
+        if (!b.dueDate) {
+          return -1
+        }
+
+        return (
+          new Date(
+            a.dueDate
+          ).getTime() -
+          new Date(
+            b.dueDate
+          ).getTime()
+        )
+      }
     )
-  })
-}
+  }
+
+  return sortedTasks
+}, [
+  tasks,
+  filter,
+  search,
+  sortOrder,
+  selectedCategory,
+])
 
   const countText =
     showFilterBar
@@ -292,21 +358,30 @@ const categories = [
           } completed`
         : `${tasks.length} Tasks`
 
- return (
-  <div data-theme={theme}
+  return (
+  <div
+    data-theme={theme}
     style={{
-      backgroundColor: theme === 'dark'? '#111827': '#ffffff',
-      color: theme === 'dark' ? '#ffffff' : '#000000',
-       minHeight: '100vh',
-       padding: '1rem',
+      backgroundColor:
+        theme === 'dark'
+          ? '#1f2937'
+          : '#ffffff',
+      color:
+        theme === 'dark'
+          ? '#ffffff'
+          : '#000000',
+      minHeight: '100vh',
     }}
   >
-    <div style={{
-    marginBottom: '1rem'}}>
-  <button id="theme-toggle"
-    onClick={toggleTheme}>
-    {theme === 'light'? 'Dark Mode': 'Light Mode'}</button>
-</div>
+    <button
+      id="theme-toggle"
+      type="button"
+      onClick={toggleTheme}
+    >
+      {theme === 'light'
+        ? 'Dark Mode'
+        : 'Light Mode'}
+    </button>
       {showForm && (
         <TaskForm
           onAddTask={
@@ -314,9 +389,7 @@ const categories = [
           }
         />
       )}
-{showStatsPanel && (
-  <StatsPanel tasks={tasks} />
-)}
+
       {showFilterBar && (
         <>
           <FilterBar
@@ -356,7 +429,16 @@ const categories = [
             No tasks found
           </div>
         )}
-
+      {showStatsPanel && (
+        <StatsPanel
+          total={stats.total}
+          completed={
+            stats.completed
+          }
+          active={stats.active}
+          overdue={stats.overdue}
+      />
+      )}
       <TaskList
         tasks={sortedTasks}
         countText={countText}
@@ -373,8 +455,10 @@ const categories = [
         editingId={
           editingId
         }
-        setEditingId={setEditingId}
+        setEditingId={
+          setEditingId
+        }
       />
-      </div>
+    </div>
   )
 }
