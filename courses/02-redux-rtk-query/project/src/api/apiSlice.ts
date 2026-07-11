@@ -1,29 +1,29 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-
-
 import { mockApi } from './mockServer'
-
 
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: '/' }),
-      endpoints: builder => ({
+  tagTypes: ['User', 'Post'],
+  endpoints: builder => ({
     getUsers: builder.query({
-
       async queryFn() {
-        try {
-          const data = await mockApi.getUsers()
-             return { data }
-        } catch (error) {
-          return {
-      error: {
-              status: 'CUSTOM_ERROR',
-                error: error instanceof Error ? error.message : 'Something went wrong' }
-          }
-    }
-      }
-                  })
-  })
-});
+        const data = await mockApi.getUsers()
+          return { data }  },
+      providesTags: result =>
+        result ? [...result.map(({ id }) => 
+              ({ type: 'User' as const, id })),
+       { type: 'User', id: 'LIST' }, ]: 
+                  [{ type: 'User', id: 'LIST' }], }),
 
-export const { useGetUsersQuery } = apiSlice
+    addPost: builder.mutation({
+      async queryFn(post) {
+        const data = await mockApi.addPost(post)
+        return { data }
+      },
+      invalidatesTags: [{ type: 'Post', id: 'LIST' }],
+    }),
+  }),
+})
+
+export const { useGetUsersQuery, useAddPostMutation,} = apiSlice
