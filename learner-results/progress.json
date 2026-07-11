@@ -1,13 +1,13 @@
 {
-  "lastUpdated": "2026-07-10T17:44:25.682Z",
+  "lastUpdated": "2026-07-11T06:23:09.105Z",
   "pathway": {
     "name": "Modern React Engineer",
     "version": "1.0.0",
-    "overallScore": 59.1,
-    "completionPercentage": 49.1,
+    "overallScore": 59.5,
+    "completionPercentage": 58.5,
     "badgeLevel": "none",
     "totalChallenges": 53,
-    "completedChallenges": 26
+    "completedChallenges": 31
   },
   "courses": {
     "01-react-fundamentals": {
@@ -369,11 +369,11 @@
     "02-redux-rtk-query": {
       "courseId": "02-redux-rtk-query",
       "courseName": "Redux & RTK Query",
-      "averageScore": 85.8,
-      "completionPercentage": 23.1,
-      "badgeLevel": "none",
+      "averageScore": 87.1,
+      "completionPercentage": 61.5,
+      "badgeLevel": "bronze",
       "totalChallenges": 13,
-      "completedChallenges": 3,
+      "completedChallenges": 8,
       "challenges": {
         "01-store-setup": {
           "challengeId": "01-store-setup",
@@ -417,6 +417,81 @@
             "architecture": 0,
             "bestPractices": 100,
             "e2eTests": 66.7,
+            "aiReview": 86
+          }
+        },
+        "04-multiple-slices": {
+          "challengeId": "04-multiple-slices",
+          "challengeName": "Multiple Slices in the Store",
+          "passed": true,
+          "score": 92.9,
+          "lastRun": "2026-07-10T17:59:50.880Z",
+          "scores": {
+            "functionalTests": 100,
+            "codeQuality": 100,
+            "architecture": 50,
+            "bestPractices": 100,
+            "e2eTests": 100,
+            "aiReview": 86
+          }
+        },
+        "05-async-thunks": {
+          "challengeId": "05-async-thunks",
+          "challengeName": "Async Logic with createAsyncThunk",
+          "passed": true,
+          "score": 91.4,
+          "lastRun": "2026-07-11T05:59:23.466Z",
+          "scores": {
+            "functionalTests": 100,
+            "codeQuality": 90,
+            "architecture": 50,
+            "bestPractices": 100,
+            "e2eTests": 100,
+            "aiReview": 86
+          }
+        },
+        "06-rtk-query-setup": {
+          "challengeId": "06-rtk-query-setup",
+          "challengeName": "RTK Query Setup and API Slice",
+          "passed": true,
+          "score": 85,
+          "lastRun": "2026-07-11T06:09:35.405Z",
+          "scores": {
+            "functionalTests": 100,
+            "codeQuality": 100,
+            "architecture": 100,
+            "bestPractices": 100,
+            "e2eTests": 100,
+            "aiReview": 0
+          }
+        },
+        "07-queries": {
+          "challengeId": "07-queries",
+          "challengeName": "Query Endpoints and useQuery Hooks",
+          "passed": true,
+          "score": 86.85,
+          "lastRun": "2026-07-11T06:15:46.513Z",
+          "scores": {
+            "functionalTests": 100,
+            "codeQuality": 100,
+            "architecture": 0,
+            "bestPractices": 100,
+            "e2eTests": 100,
+            "aiReview": 79
+          }
+        },
+        "08-caching-refetch": {
+          "challengeId": "08-caching-refetch",
+          "challengeName": "Caching and Cache Tags",
+          "passed": true,
+          "score": 82.9,
+          "lastRun": "2026-07-11T06:22:29.995Z",
+          "scores": {
+            "functionalTests": 100,
+            "codeQuality": 100,
+            "architecture": 100,
+            "bestPractices": 100,
+            "e2eTests": 0,
             "aiReview": 86
           }
         }

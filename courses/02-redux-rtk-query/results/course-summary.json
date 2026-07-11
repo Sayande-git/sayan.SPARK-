@@ -1,12 +1,12 @@
 {
   "courseId": "02-redux-rtk-query",
   "courseName": "Redux & RTK Query",
-  "lastUpdated": "2026-07-10T17:44:25.602Z",
+  "lastUpdated": "2026-07-11T06:23:08.993Z",
   "totalChallenges": 13,
-  "completedChallenges": 3,
-  "averageScore": 85.8,
-  "completionPercentage": 23.1,
-  "badgeLevel": "none",
+  "completedChallenges": 8,
+  "averageScore": 87.1,
+  "completionPercentage": 61.5,
+  "badgeLevel": "bronze",
   "challengeResults": [
     {
       "challengeId": "01-store-setup",
@@ -25,12 +25,47 @@
       "challengeName": "Reading and Dispatching in Components",
       "score": 82.905,
       "passed": true
+    },
+    {
+      "challengeId": "04-multiple-slices",
+      "challengeName": "Multiple Slices in the Store",
+      "score": 92.9,
+      "passed": true
+    },
+    {
+      "challengeId": "05-async-thunks",
+      "challengeName": "Async Logic with createAsyncThunk",
+      "score": 91.4,
+      "passed": true
+    },
+    {
+      "challengeId": "06-rtk-query-setup",
+      "challengeName": "RTK Query Setup and API Slice",
+      "score": 85,
+      "passed": true
+    },
+    {
+      "challengeId": "07-queries",
+      "challengeName": "Query Endpoints and useQuery Hooks",
+      "score": 86.85,
+      "passed": true
+    },
+    {
+      "challengeId": "08-caching-refetch",
+      "challengeName": "Caching and Cache Tags",
+      "score": 82.9,
+      "passed": true
     }
   ],
   "skillStrengths": [
     "Store Setup with configureStore",
     "First Slice with createSlice",
-    "Reading and Dispatching in Components"
+    "Reading and Dispatching in Components",
+    "Multiple Slices in the Store",
+    "Async Logic with createAsyncThunk",
+    "RTK Query Setup and API Slice",
+    "Query Endpoints and useQuery Hooks",
+    "Caching and Cache Tags"
   ],
   "improvementAreas": []
 }
