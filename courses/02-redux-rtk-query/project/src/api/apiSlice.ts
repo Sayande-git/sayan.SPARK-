@@ -1,47 +1,90 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { mockApi } from './mockServer'
+import type { User, Post } from './mockServer'
 
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: '/' }),
   tagTypes: ['User', 'Post'],
   endpoints: builder => ({
-    getUsers: builder.query({
+    getUsers: builder.query<User[], void>({
       async queryFn() {
-        const data = await mockApi.getUsers()
-        return { data }
+        try {
+          const data = await mockApi.getUsers()
+          return { data }
+        } catch (error) {
+          return {
+            error: {
+              status: 'CUSTOM_ERROR',
+              error: error instanceof Error ? error.message : 'Something went wrong',
+            },
+          }
+        }
       },
       providesTags: result =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: 'User' as const, id })),
-              { type: 'User', id: 'LIST' },
+              ...result.map(user => ({ type: 'User' as const, id: user.id })),
+              { type: 'User' as const, id: 'LIST' },
             ]
-          : [{ type: 'User', id: 'LIST' }],
+          : [{ type: 'User' as const, id: 'LIST' }],
     }),
 
-    getPosts: builder.query({
+    getPosts: builder.query<Post[], void>({
       async queryFn() {
-        const data = await mockApi.getPosts()
-        return { data }
+        try {
+          const data = await mockApi.getPosts()
+          return { data }
+        } catch (error) {
+          return {
+            error: {
+              status: 'CUSTOM_ERROR',
+              error: error instanceof Error ? error.message : 'Something went wrong',
+            },
+          }
+        }
       },
       providesTags: result =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: 'Post' as const, id })),
-              { type: 'Post', id: 'LIST' },
+              ...result.map(post => ({ type: 'Post' as const, id: post.id })),
+              { type: 'Post' as const, id: 'LIST' },
             ]
-          : [{ type: 'Post', id: 'LIST' }],
+          : [{ type: 'Post' as const, id: 'LIST' }],
     }),
 
-    addPost: builder.mutation({
+    getPostById: builder.query<Post, number>({
+      async queryFn(id) {
+        try {
+          const data = await mockApi.getPostById(id)
+          return { data }
+        } catch (error) {
+          return {
+            error: {
+              status: 'CUSTOM_ERROR',
+              error: error instanceof Error ? error.message : 'Something went wrong',
+            },
+          }
+        }
+      },
+      providesTags: (result, error, id) => [{ type: 'Post', id }],
+    }),
+
+    addPost: builder.mutation<Post, Omit<Post, 'id'>>({
       async queryFn(post) {
-        const data = await mockApi.addPost(post)
-        return { data }
+        try {
+          const data = await mockApi.createPost(post)
+          return { data }
+        } catch (error) {
+          return {
+            error: {
+              status: 'CUSTOM_ERROR',
+              error: error instanceof Error ? error.message : 'Something went wrong',
+            },
+          }
+        }
       },
-
       invalidatesTags: [{ type: 'Post', id: 'LIST' }],
-
       async onQueryStarted(post, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           apiSlice.util.updateQueryData('getPosts', undefined, draft => {
@@ -62,4 +105,4 @@ export const apiSlice = createApi({
   }),
 })
 
-export const {useGetUsersQuery,useGetPostsQuery,useAddPostMutation,} = apiSlice
+export const {useGetUsersQuery,useGetPostsQuery,useGetPostByIdQuery,useAddPostMutation,} = apiSlice
